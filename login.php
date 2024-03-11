@@ -3,6 +3,12 @@ require('dbconnect.php');
 
 session_start();
 
+if($_COOKIE['user_id'] != ''){
+    $_POST['user_id'] = $_COOKIE['user_id'];
+    $_POST['password'] = $_COOKIE['password'];
+    $_POST['save'] = 'on';
+}
+
 if (!empty($_POST)) {
     if ($_POST['user_id'] != '' && $_POST['password'] != '') {
         $login = $db->prepare('SELECT * FROM users WHERE user_id=? AND password=?');
@@ -15,6 +21,11 @@ if (!empty($_POST)) {
         if ($users) {
             $_SESSION['user_id'] = $users['user_id'];
             $_SESSION['time'] = time();
+
+            if($_POST['save'] == 'on'){
+                setcookie('user_id' ,$_POST['user_id'] , time()+60*60*24*14);
+                setcookie('password' ,$_POST['password'] , time()+60*60*24*14);
+            }
 
             header('Location: index.php');
             exit();
