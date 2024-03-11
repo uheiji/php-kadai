@@ -17,6 +17,7 @@
     <br>
     <h1>掲示板サイト</h1>
     <br>
+    <h2>インデックスページ</h2>
  
     <div class="border col-8">
         <br>
@@ -58,6 +59,3 @@
 </body>
  
 </html>
-<?php
-phpinfo();
-?>

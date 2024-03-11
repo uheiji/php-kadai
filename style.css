@@ -1,0 +1,19 @@
+.error {
+  font-size: 90%;
+  color: #BB1850;
+}
+
+.register p{
+	color: #fff;
+  padding-top: 2rem;
+}
+.register a{
+	color: #fff;
+}
+.register a:hover{
+	opacity: 0.7;
+}
+
+.row{
+  margin-left: 0;
+}

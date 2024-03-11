@@ -47,7 +47,7 @@ if($_REQUEST['action'] == 'rewrite'){
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="../style..css">
+    <link rel="stylesheet" href="../style.css">
     <title>掲示板サイト</title>
 </head>
 
@@ -59,7 +59,7 @@ if($_REQUEST['action'] == 'rewrite'){
 
     <div class="border col-8">
         <br>
-        <h2></h2>
+        <h2>ユーザー登録ページ</h2>
         <br>
         <div class="row">
             <div class="col-md">

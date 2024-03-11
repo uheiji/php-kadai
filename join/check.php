@@ -11,7 +11,7 @@ if(!empty($_POST)){
     $statement = $db->prepare('INSERT INTO users SET username=?, password=?, nickname=?, create_date=NOW(), update_date=CURRENT_TIMESTAMP ,user_id=?');
     $ret = $statement->execute(array(
         $_SESSION['join']['username'],
-        password_hash($_SESSION['join']['password'], PASSWORD_DEFAULT), // パスワードを安全にハッシュ化する
+        sha1($_SESSION['join']['password']), 
         $_SESSION['join']['nickname'],
         $_SESSION['join']['user_id']
     ));
