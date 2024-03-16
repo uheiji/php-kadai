@@ -27,7 +27,7 @@ if (!empty($_POST)) {
                 setcookie('password' ,$_POST['password'] , time()+60*60*24*14);
             }
 
-            header('Location: index.php');
+            header('Location: question/index.php');
             exit();
         } else {
             $error['login'] = 'failed';
@@ -35,6 +35,10 @@ if (!empty($_POST)) {
     } else {
         $error['login'] = 'blank';
     }
+}
+// htmlspecialcharsのショートカット
+    function h($value){
+    return htmlspecialchars($value, ENT_QUOTES);
 }
 ?>
 <!doctype html>
@@ -76,7 +80,7 @@ if (!empty($_POST)) {
                     <dl>
                         <div class="form-group">
                             <dt><label>ユーザーID：</label></dt>
-                            <dd><input type="text" name="user_id" maxlength="255" class="form-control" placeholder="" value="<?php echo htmlspecialchars($_POST['user_id'], ENT_QUOTES); ?>"></dd>
+                            <dd><input type="text" name="user_id" maxlength="255" class="form-control" placeholder="" value="<?php echo h($_POST['user_id']); ?>"></dd>
                             <?php if ($error['login'] == 'blank') : ?>
                                 <p class="error">＊ユーザーIDとパスワードを入力してください</p>
                             <?php endif; ?>
@@ -86,7 +90,7 @@ if (!empty($_POST)) {
                         </div>
                         <div class="form-group">
                             <dt><label>パスワード：</label></dt>
-                            <dd><input type="password" name="password" maxlength="20" class="form-control" placeholder="" value="<?php echo htmlspecialchars($_POST['password'], ENT_QUOTES); ?>"></dd>
+                            <dd><input type="password" name="password" maxlength="20" class="form-control" placeholder="" value="<?php echo h($_POST['password']); ?>"></dd>
                         </div>
                     </dl>
                     <div class="row center-block text-center">

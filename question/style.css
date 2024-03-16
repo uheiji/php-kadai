@@ -80,60 +80,95 @@ input, select {
 
 
 /*==================================================================================
-# 
-================================================================================== */
-.error {
-  font-size: 90%;
-  color: #BB1850;
-}
-
-.register p{
-	color: #fff;
-  padding-top: 2rem;
-}
-.register a{
-	color: #fff;
-}
-.register a:hover{
-	opacity: 0.7;
-}
-
-.row{
-  margin-left: 0;
-}
-
-.addQuestion{
-  padding-top: 60px;
-}
-
-.addQuestion h1{
-  padding: 0.4em 0.5em;/*文字の上下 左右の余白*/
-  color: #494949;/*文字色*/
-  background: #f4f4f4;/*背景色*/
-  border-left: solid 5px #7db4e6;/*左線*/
-  border-bottom: solid 3px #d7d7d7;/*下線*/
-  font-size: 2rem;
-}
-
-.addQuestion textarea{
-  resize: none;
-  width: 50%;
-  padding: 10px;
-}
-
-.msg__list{
-  margin-top: 10px;
-}
-
-.msg__body{
-  padding: 5px 10px;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  background: red;
-}
-/*==================================================================================
 # question index.php
 ================================================================================== */
 .question{
-  padding-top: 60px;
+    padding-top: 60px;
+}
+
+.question h1{
+    padding: 0.4em 0.5em;/*文字の上下 左右の余白*/
+    color: #494949;/*文字色*/
+    background: #f4f4f4;/*背景色*/
+    border-left: solid 5px #7db4e6;/*左線*/
+    border-bottom: solid 3px #d7d7d7;/*下線*/
+    font-size: 2rem;
+}
+
+
+
+.msg__lists{
+    margin-top: 10px;
+}
+.msg__list:first-of-type{
+    border-top: 1px solid #ccc;
+}
+
+.msg__list a{
+    color: #000;
+    text-decoration: none;
+}
+.msg__list a:hover{
+    opacity: 0.7;
+}
+
+.msg__body{
+    padding: 15px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.msg__question{
+    font-size: 22px;
+}
+
+.name{
+    padding-left: 30px;
+}
+
+.msg__day{
+    margin-top: 10px;
+    color: #333;
+}
+
+/*==================================================================================
+# detail.php
+================================================================================== */
+.detail{
+    padding-top: 40px;
+}
+
+.detail__name{
+    font-size: 18px;
+    padding-bottom: 5px;
+}
+
+.detail__msg-wrap{
+    padding: 30px;
+    background: skyblue;
+    font-size: 22px;
+    position: relative;
+}
+
+.detail__day{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 14px;
+}
+
+.return{
+    font-size: 20px;
+    text-align: center;
+    display: block;
+    margin-top: 30px;
+}
+
+.return:hover{
+    opacity: 0.7;
+    text-decoration: none;
+}
+
+.detail__error{
+    font-size: 18px;
+    padding: 10px;
 }

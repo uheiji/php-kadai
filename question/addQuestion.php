@@ -1,4 +1,37 @@
+<?php 
+    session_start();
+    require('../dbconnect.php');
 
+    if(isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()){
+        $_SESSION['time'] = time();
+
+        $users = $db->prepare('SELECT * FROM users WHERE user_id=?');
+        $users->execute(array(
+            $_SESSION['user_id']
+        ));
+        $users = $users->fetch();
+    }else{
+        header('Location: ../login.php'); exit();
+    }
+
+    if(!empty($_POST)){
+        if($_POST['message'] != ''){
+            $message = $db->prepare('INSERT INTO questions SET user_id=?, body=?, create_date=NOW()');
+            $message->execute(array(
+                $users['user_id'],
+                $_POST['message']
+            ));
+
+            header('Location: ../index.php'); exit();
+
+        }
+    }
+
+    // htmlspecialcharsのショートカット
+    function h($value){
+    return htmlspecialchars($value, ENT_QUOTES);
+    }
+?>
 <!doctype html>
 <html lang="ja">
 <head>
@@ -8,7 +41,7 @@
  
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <title>掲示板サイト</title>
 </head>
 <header>
@@ -43,8 +76,22 @@
 </header>
  
 <body>
-
+    <div class="container addQuestion">
+        <h1>質問投稿ページ</h1>
+        <p>*質問文は具体的にわかりやすくお願いします</p>
+        <p><?php echo h($users['user_id'] ); ?>さん質問をどうぞ</p>
+        <form action="" method="post">
+            <dl>
+                <dt>質問文</dt>
+                <dd><textarea name="message" id="" cols="30" rows="10"></textarea></dd>
+            </dl>
+            <div class="col-2">
+                <input type="submit" class="btn btn-outline-primary btn-block" value="質問する">
+            </div>
+        </form>
+    </div>
     
+
  
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -54,3 +101,4 @@
 </body>
  
 </html>
+
