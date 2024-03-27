@@ -2,26 +2,34 @@
 session_start();
 require('../dbconnect.php');
 
-// URLパラメータが正しくしてされているか確認、なければトップに戻る
-if (empty($_REQUEST['id'])) {
-    header('Location: index.php');
-    exit();
-}
-
 // htmlspecialcharsのショートカット
 function h($value)
 {
     return htmlspecialchars($value, ENT_QUOTES);
 }
 
+// 本文内のURLにリンクを設定
+function makeLink($value)
+{
+    return mb_ereg_replace("(https?)(://[[:alnum:]\+\$\;\?\.%.!#~*/:@&=_-]+)", '<a href="\1\2">\1\2<a>', $value);
+}
 
+$page = $_REQUEST['page'];
+if ($page == '') {
+    $page = 1;
+}
 
-$posts = $db->prepare('SELECT u.username, q.* FROM users u , questions q WHERE u.user_id=q.user_id AND q.id=? ORDER BY q.create_date DESC');
-$posts->execute(array($_REQUEST['id']));
+$page = max($page, 1);
 
-$answers = $db->prepare('SELECT u.username, q.*, a.* FROM users u , questions q , answers a WHERE a.question_id=q.id AND q.id=? AND a.user_id = u.user_id  ORDER BY q.create_date ASC');
-$answers->execute(array($_REQUEST['id']));
+$counts = $db->query('SELECT COUNT(*) AS cnt FROM answers');
+$cnt = $counts->fetch();
+$maxPage = ceil($cnt['cnt'] / 5);
+$page = min($page, $maxPage);
 
+$start = ($page - 1) * 5;
+$answers = $db->prepare('SELECT u.nickname, a.* FROM users u, answers a WHERE u.user_id=a.user_id ORDER BY a.create_date ASC LIMIT ? , 5');
+$answers->bindParam(1, $start, PDO::PARAM_INT);
+$answers->execute();
 ?>
 <!doctype html>
 <html lang="ja">
@@ -69,43 +77,51 @@ $answers->execute(array($_REQUEST['id']));
 
 <body>
     <div class="container question">
-        <h1>質問詳細ページ</h1>
-        <?php if ($post = $posts->fetch()) : ?>
-            <div class="detail">
-                <p class="detail__name"><?php echo h($post['username']); ?>さんの質問</p>
-                <div class="detail__msg-wrap">
-                    <p class="detail__msg"><?php echo h($post['body']); ?></p>
-                    <span class="detail__day"><?php echo h($post['create_date']); ?></span>
-                </div>
-            </div>
-        <?php else : ?>
-            <p class="detail__error">その投稿は削除されたかURLが間違えています。</p>
-        <?php endif; ?>
-
-        <a href="/answers/addanswer.php?res=<?php echo h($post['id']); ?>" class="answer-btn">この質問の回答をする</a>
-        <?php if ($answers->rowCount() > 0) : ?>
-
-        <div class="before-answer">
-            <h2 class="before-answer-title">質問に対する回答</h2>
+        <h1>回答一覧ページ</h1>
+        <div class="msg__lists">
+            <?php
+            foreach ($answers as $answer) :
+            ?>
+                <article class="msg__list">
+                    <a href="detail.php?id=<?php echo h($answer['id']) ?>">
+                        <div class="msg__body">
+                            <p class="msg__question"><?php echo makeLink(h($answer['body'])); ?><span class="name">(<?php echo h($answer['nickname']); ?>)</span></p>
+                            <p class="msg__day"><?php echo h($answer['create_date']); ?></p>
+                            <?php if ($_SESSION['user_id'] == $answer['user_id']) : ?>
+                                [<a href="delete.php?id=<?php echo h($answer['id']); ?>" style="color:red;">削除</a>]
+                            <?php endif; ?>
+                        </div>
+                    </a>
+                </article>
+            <?php
+            endforeach;
+            ?>
         </div>
-            <?php while ($answer = $answers->fetch()) : ?>
-                <div class="answer__item">
-                    <p class="answer__item-name"><?php echo h($answer['username']); ?>さんの回答</p>
-                    <div class="answer__item-msg-wrap">
-                        <p class="answer__item-msg"><?php echo h($answer['body']); ?></p>
-                        <span class="answer__item-day"><?php echo h($answer['create_date']); ?></span>
-                    </div>
-                </div>
-            <?php endwhile; ?>
-        <?php else : ?>
-            <div class="answer__item-msg-wrap">
-                        <p class="answer__item-msg">この質問に対する回答はありません</p>
-                    </div>
-        <?php endif; ?>
-
-        <a class="return" href="index.php">質問一覧に戻る</a>
     </div>
-
+    <ul class="page" style="text-align: center; margin-top:20px;">
+        <?php
+        if ($page > 1) {
+        ?>
+            <li style="display:inline;"><a href="index.php?page=<?php print($page - 1); ?>">前のページへ</a></li>
+        <?php
+        } else {
+        ?>
+            <li style="display:inline;">前のページへ</li>
+        <?php
+        }
+        ?>
+        <?php
+        if ($page < $maxPage) {
+        ?>
+            <li style="display:inline;"><a href="index.php?page=<?php print($page + 1); ?>">次のページへ</a></li>
+        <?php
+        } else {
+        ?>
+            <li style="display:inline;">次のページへ</li>
+        <?php
+        }
+        ?>
+    </ul>
 
 
 

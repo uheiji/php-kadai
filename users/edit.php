@@ -2,9 +2,16 @@
 session_start();
 require('../dbconnect.php');
 
-// URLパラメータが正しくしてされているか確認、なければトップに戻る
-if (empty($_REQUEST['id'])) {
-    header('Location: index.php');
+if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) {
+    $_SESSION['time'] = time();
+
+    $users = $db->prepare('SELECT * FROM users WHERE user_id=?');
+    $users->execute(array(
+        $_SESSION['user_id']
+    ));
+    $users = $users->fetch();
+} else {
+    header('Location: ../login.php');
     exit();
 }
 
@@ -13,14 +20,6 @@ function h($value)
 {
     return htmlspecialchars($value, ENT_QUOTES);
 }
-
-
-
-$posts = $db->prepare('SELECT u.username, q.* FROM users u , questions q WHERE u.user_id=q.user_id AND q.id=? ORDER BY q.create_date DESC');
-$posts->execute(array($_REQUEST['id']));
-
-$answers = $db->prepare('SELECT u.username, q.*, a.* FROM users u , questions q , answers a WHERE a.question_id=q.id AND q.id=? AND a.user_id = u.user_id  ORDER BY q.create_date ASC');
-$answers->execute(array($_REQUEST['id']));
 
 ?>
 <!doctype html>
@@ -33,6 +32,7 @@ $answers->execute(array($_REQUEST['id']));
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <link rel="stylesheet" href="style.css">
     <title>掲示板サイト</title>
 </head>
@@ -68,49 +68,47 @@ $answers->execute(array($_REQUEST['id']));
 </header>
 
 <body>
-    <div class="container question">
-        <h1>質問詳細ページ</h1>
-        <?php if ($post = $posts->fetch()) : ?>
-            <div class="detail">
-                <p class="detail__name"><?php echo h($post['username']); ?>さんの質問</p>
-                <div class="detail__msg-wrap">
-                    <p class="detail__msg"><?php echo h($post['body']); ?></p>
-                    <span class="detail__day"><?php echo h($post['create_date']); ?></span>
-                </div>
+    <div class="container">
+        <h1 class="title">マイページ</h1>
+        <div class="mypage__header">
+            <p class="mypage__head"><span><?php echo $users['username']; ?></span> さん</p>
+            <div class="mypage__edit">
+                <a href="">
+                    <i class="fas fa-cog"></i>
+                </a>
             </div>
-        <?php else : ?>
-            <p class="detail__error">その投稿は削除されたかURLが間違えています。</p>
-        <?php endif; ?>
-
-        <a href="/answers/addanswer.php?res=<?php echo h($post['id']); ?>" class="answer-btn">この質問の回答をする</a>
-        <?php if ($answers->rowCount() > 0) : ?>
-
-        <div class="before-answer">
-            <h2 class="before-answer-title">質問に対する回答</h2>
         </div>
-            <?php while ($answer = $answers->fetch()) : ?>
-                <div class="answer__item">
-                    <p class="answer__item-name"><?php echo h($answer['username']); ?>さんの回答</p>
-                    <div class="answer__item-msg-wrap">
-                        <p class="answer__item-msg"><?php echo h($answer['body']); ?></p>
-                        <span class="answer__item-day"><?php echo h($answer['create_date']); ?></span>
+        <dl class="profile">
+            <form action="update.php" method="post">
+                <div>
+                    <dt>ユーザーネーム:</dt>
+                    <dd>
+                        <input type="text" name="username" value="<?php echo $users['username']; ?>">
+                    </dd>
+                </div>
+                <div>
+                    <dt>ユーザーID:</dt>
+                    <dd>
+                        <input type="text" name="user_id" value="<?php echo $users['user_id']; ?>">
+                    </dd>
+                </div>
+                <div>
+                    <dt>ニックネーム:</dt>
+                    <dd><input type="text" name="nickname" value="<?php echo $users['nickname']; ?>"></dd>
+                </div>
+                <div class="row center-block text-center">
+                    <div class="col-4">
+                        <input type="submit" class="btn btn-outline-primary btn-block" value="変更する">
                     </div>
                 </div>
-            <?php endwhile; ?>
-        <?php else : ?>
-            <div class="answer__item-msg-wrap">
-                        <p class="answer__item-msg">この質問に対する回答はありません</p>
-                    </div>
-        <?php endif; ?>
+            </form>
+        </dl>
 
-        <a class="return" href="index.php">質問一覧に戻る</a>
     </div>
-
-
-
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

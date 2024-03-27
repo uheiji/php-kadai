@@ -2,17 +2,34 @@
 session_start();
 require('../dbconnect.php');
 
-$posts = $db->query('SELECT u.nickname, q.* FROM users u, questions q WHERE u.user_id=q.user_id ORDER BY q.create_date DESC');
-
 // htmlspecialcharsのショートカット
-function h($value){
+function h($value)
+{
     return htmlspecialchars($value, ENT_QUOTES);
 }
 
 // 本文内のURLにリンクを設定
-function makeLink($value){
-    return mb_ereg_replace("(https?)(://[[:alnum:]\+\$\;\?\.%.!#~*/:@&=_-]+)" ,'<a href="\1\2">\1\2<a>' ,$value);
+function makeLink($value)
+{
+    return mb_ereg_replace("(https?)(://[[:alnum:]\+\$\;\?\.%.!#~*/:@&=_-]+)", '<a href="\1\2">\1\2<a>', $value);
 }
+
+$page = $_REQUEST['page'];
+if ($page == '') {
+    $page = 1;
+}
+
+$page = max($page, 1);
+
+$counts = $db->query('SELECT COUNT(*) AS cnt FROM questions');
+$cnt = $counts->fetch();
+$maxPage = ceil($cnt['cnt'] / 5);
+$page = min($page, $maxPage);
+
+$start = ($page - 1) * 5;
+$posts = $db->prepare('SELECT u.nickname, q.* FROM users u, questions q WHERE u.user_id=q.user_id ORDER BY q.create_date DESC LIMIT ? , 5');
+$posts->bindParam(1, $start, PDO::PARAM_INT);
+$posts->execute();
 ?>
 <!doctype html>
 <html lang="ja">
@@ -62,22 +79,50 @@ function makeLink($value){
     <div class="container question">
         <h1>質問一覧ページ</h1>
         <div class="msg__lists">
-        <?php
-        foreach ($posts as $post) :
-        ?>
-            <article class="msg__list">
-                <a href="detail.php?id=<?php echo h($post['id'] ) ?>">
-                    <div class="msg__body">
-                        <p class="msg__question"><?php echo makeLink(h($post['body'])); ?><span class="name">(<?php echo h($post['nickname']); ?>)</span></p>
-                        <p class="msg__day"><?php echo h($post['create_date']); ?></p>
-                    </div>
-                </a>
-            </article>
-        <?php
-        endforeach;
-        ?>
+            <?php
+            foreach ($posts as $post) :
+            ?>
+                <article class="msg__list">
+                    <a href="detail.php?id=<?php echo h($post['id']) ?>">
+                        <div class="msg__body">
+                            <p class="msg__question"><?php echo makeLink(h($post['body'])); ?><span class="name">(<?php echo h($post['nickname']); ?>)</span></p>
+                            <p class="msg__day"><?php echo h($post['create_date']); ?></p>
+                            <?php if ($_SESSION['user_id'] == $post['user_id']) : ?>
+                                [<a href="delete.php?id=<?php echo h($post['id']); ?>" style="color:red;">削除</a>]
+                            <?php endif; ?>
+                            [<a href="/answers/addanswer.php?res=<?php echo h($post['id']); ?>"  style="color:blue;">回答する</a>]
+                        </div>
+                    </a>
+                </article>
+            <?php
+            endforeach;
+            ?>
         </div>
     </div>
+    <ul class="page" style="text-align: center; margin-top:20px;">
+        <?php
+        if ($page > 1) {
+        ?>
+            <li style="display:inline;"><a href="index.php?page=<?php print($page - 1); ?>">前のページへ</a></li>
+        <?php
+        } else {
+        ?>
+            <li style="display:inline;">前のページへ</li>
+        <?php
+        }
+        ?>
+        <?php
+        if ($page < $maxPage) {
+        ?>
+            <li style="display:inline;"><a href="index.php?page=<?php print($page + 1); ?>">次のページへ</a></li>
+        <?php
+        } else {
+        ?>
+            <li style="display:inline;">次のページへ</li>
+        <?php
+        }
+        ?>
+    </ul>
 
 
 

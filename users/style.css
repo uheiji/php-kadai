@@ -1,0 +1,140 @@
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+body {
+    line-height:1;
+}
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section { 
+    display:block;
+}
+ul {
+    list-style:none;
+}
+blockquote, q {
+    quotes:none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+a {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+    text-decoration: none;
+}
+ins {
+    background-color:#fff;
+    color:#000;
+    text-decoration:none;
+}
+mark {
+    background-color:#fff;
+    color:#000; 
+    font-style:italic;
+    font-weight:bold;
+}
+del {
+    text-decoration: line-through;
+}
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+hr {
+    display:block;
+    height:1px;
+    border:0;   
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+input, select {
+    vertical-align:middle;
+}
+
+.question h1{
+    padding: 0.4em 0.5em;/*文字の上下 左右の余白*/
+    color: #494949;/*文字色*/
+    background: #f4f4f4;/*背景色*/
+    border-left: solid 5px #7db4e6;/*左線*/
+    border-bottom: solid 3px #d7d7d7;/*下線*/
+    font-size: 2rem;
+}
+
+.title{
+    padding: 0.4em 0.5em;/*文字の上下 左右の余白*/
+    color: #494949;/*文字色*/
+    background: #f4f4f4;/*背景色*/
+    border-left: solid 5px #7db4e6;/*左線*/
+    border-bottom: solid 3px #d7d7d7;/*下線*/
+    font-size: 2rem;
+}
+
+.container{
+    padding-top: 60px;
+}
+
+.mypage__header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.mypage__head span {
+    font-size: 22px;
+}
+.mypage__edit a{
+    display: block;
+    font-size: 30px;
+    color: #333;
+}
+
+.profile{
+    padding: 20px 10px;
+}
+
+.profile div{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+.profile dt{
+    margin-right: 10px;
+    width: 20%;
+}
+.profile dd{
+    margin-right: 10px;
+    width: 80%;
+}
+.profile input{
+    padding: 5px;
+    width: 100%;
+}
+
+
