@@ -3,7 +3,7 @@ require('dbconnect.php');
 
 session_start();
 
-if($_COOKIE['user_id'] != ''){
+if ($_COOKIE['user_id'] != '') {
     $_POST['user_id'] = $_COOKIE['user_id'];
     $_POST['password'] = $_COOKIE['password'];
     $_POST['save'] = 'on';
@@ -22,9 +22,9 @@ if (!empty($_POST)) {
             $_SESSION['user_id'] = $users['user_id'];
             $_SESSION['time'] = time();
 
-            if($_POST['save'] == 'on'){
-                setcookie('user_id' ,$_POST['user_id'] , time()+60*60*24*14);
-                setcookie('password' ,$_POST['password'] , time()+60*60*24*14);
+            if ($_POST['save'] == 'on') {
+                setcookie('user_id', $_POST['user_id'], time() + 60 * 60 * 24 * 14);
+                setcookie('password', $_POST['password'], time() + 60 * 60 * 24 * 14);
             }
 
             header('Location: question/index.php');
@@ -37,7 +37,8 @@ if (!empty($_POST)) {
     }
 }
 // htmlspecialcharsのショートカット
-    function h($value){
+function h($value)
+{
     return htmlspecialchars($value, ENT_QUOTES);
 }
 ?>
@@ -51,23 +52,21 @@ if (!empty($_POST)) {
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <link rel="stylesheet" href="/style.css">
     <title>掲示板サイト</title>
 </head>
 
 <body>
 
-    <br>
-    <h1>掲示板サイト</h1>
-    <br>
-
-    <h2>ログインページ</h2>
+    <h2 style="font-size: 2rem;">ログインページ</h2>
 
     <div class="border col-8 bg-primary">
         <div class="register">
             <p>ユーザーIDとパスワードを記入してログインしてください</p>
             <p>登録がまだの方はこちらからどうぞ</p>
             <a href="join/index.php">>会員登録をする</a>
+            <a href="index.php"><i class="fas fa-home"></i>ホームへ戻る</a>
         </div>
     </div>
 
@@ -90,7 +89,10 @@ if (!empty($_POST)) {
                         </div>
                         <div class="form-group">
                             <dt><label>パスワード：</label></dt>
-                            <dd><input type="password" name="password" maxlength="20" class="form-control" placeholder="" value="<?php echo h($_POST['password']); ?>"></dd>
+                            <dd class="password-container">
+                                <input type="password" name="password" maxlength="20" class="form-control" id="passwordInput" value="<?php echo h($_POST['password']); ?>">
+                                <button id="showPasswordButton">表示</button>
+                            </dd>
                         </div>
                     </dl>
                     <div class="row center-block text-center">
@@ -107,6 +109,9 @@ if (!empty($_POST)) {
         </div>
 
         <br>
+
+        </dd>
+    </div>
     </div>
 
     <!-- Optional JavaScript -->
@@ -114,6 +119,23 @@ if (!empty($_POST)) {
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>    
+        var showPasswordButton = document.getElementById("showPasswordButton");
+        showPasswordButton.addEventListener("click", togglePasswordVisibility);
+
+        function togglePasswordVisibility(event) {
+            event.preventDefault(); // デフォルトのクリック動作をキャンセル
+
+            var passwordInput = document.getElementById("passwordInput");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                showPasswordButton.textContent = "非表示";
+            } else {
+                passwordInput.type = "password";
+                showPasswordButton.textContent = "表示";
+            }
+        }
+    </script>
 </body>
 
 </html>

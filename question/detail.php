@@ -13,13 +13,16 @@ function h($value)
 {
     return htmlspecialchars($value, ENT_QUOTES);
 }
-
+// 回答数を100件以下に制御
+$statement = $db->prepare('SELECT COUNT(*) FROM answers WHERE question_id = ?');
+$statement->execute(array($_REQUEST['id']));
+$answers_count = $statement->fetchColumn();
 
 
 $posts = $db->prepare('SELECT u.username, q.* FROM users u , questions q WHERE u.user_id=q.user_id AND q.id=? ORDER BY q.create_date DESC');
 $posts->execute(array($_REQUEST['id']));
 
-$answers = $db->prepare('SELECT u.username, q.*, a.* FROM users u , questions q , answers a WHERE a.question_id=q.id AND q.id=? AND a.user_id = u.user_id  ORDER BY q.create_date ASC');
+$answers = $db->prepare('SELECT u.username, q.*, a.* FROM users u , questions q , answers a WHERE a.question_id=q.id AND q.id=? AND a.user_id = u.user_id  ORDER BY a.create_date ASC');
 $answers->execute(array($_REQUEST['id']));
 
 ?>
@@ -46,17 +49,23 @@ $answers->execute(array($_REQUEST['id']));
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="../index.php">ホーム<span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ログインする</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ログアウトする</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">新規登録</a>
-                </li>
+                <?php if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../users/mypage.php">マイページ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../logout.php">ログアウトする</a>
+                    </li>
+                <?php else : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../login.php">ログインする</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../join/index.php">新規登録</a>
+                    </li>
+                <?php endif; ?>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -82,12 +91,22 @@ $answers->execute(array($_REQUEST['id']));
             <p class="detail__error">その投稿は削除されたかURLが間違えています。</p>
         <?php endif; ?>
 
-        <a href="/answers/addanswer.php?res=<?php echo h($post['id']); ?>" class="answer-btn">この質問の回答をする</a>
+        <?php if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) : ?>
+            <?php if ($answers_count > 100) : ?>
+                <p class="answer-btn">これ以上回答はできません</p>
+            <?php else : ?>
+                <a href="/answers/addanswer.php?res=<?php echo h($post['id']); ?>" class="answer-btn">この質問の回答をする</a>
+            <?php endif; ?>
+        <?php else : ?>
+            <p class="answer-btn">回答を投稿するにはログインしてください</p>
+        <?php endif; ?>
+
+
         <?php if ($answers->rowCount() > 0) : ?>
 
-        <div class="before-answer">
-            <h2 class="before-answer-title">質問に対する回答</h2>
-        </div>
+            <div class="before-answer">
+                <h2 class="before-answer-title">質問に対する回答</h2>
+            </div>
             <?php while ($answer = $answers->fetch()) : ?>
                 <div class="answer__item">
                     <p class="answer__item-name"><?php echo h($answer['username']); ?>さんの回答</p>
@@ -99,12 +118,15 @@ $answers->execute(array($_REQUEST['id']));
             <?php endwhile; ?>
         <?php else : ?>
             <div class="answer__item-msg-wrap">
-                        <p class="answer__item-msg">この質問に対する回答はありません</p>
-                    </div>
+                <p class="answer__item-msg">この質問に対する回答はありません</p>
+            </div>
         <?php endif; ?>
 
         <a class="return" href="index.php">質問一覧に戻る</a>
     </div>
+
+    <?php echo  $answers_count; ?>
+    <?php echo  $message; ?>
 
 
 

@@ -52,19 +52,25 @@ $answers->execute();
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="../index.php">ホーム<span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ログインする</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ログアウトする</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">新規登録</a>
-                </li>
+                <?php if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../users/mypage.php">マイページ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../logout.php">ログアウトする</a>
+                    </li>
+                <?php else : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../login.php">ログインする</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../join/index.php">新規登録</a>
+                    </li>
+                <?php endif; ?>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -83,7 +89,7 @@ $answers->execute();
             foreach ($answers as $answer) :
             ?>
                 <article class="msg__list">
-                    <a href="detail.php?id=<?php echo h($answer['id']) ?>">
+                    <a href="detail.php?id=<?php echo h($post['id']) ?>">
                         <div class="msg__body">
                             <p class="msg__question"><?php echo makeLink(h($answer['body'])); ?><span class="name">(<?php echo h($answer['nickname']); ?>)</span></p>
                             <p class="msg__day"><?php echo h($answer['create_date']); ?></p>
@@ -130,6 +136,7 @@ $answers->execute();
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

@@ -45,17 +45,23 @@ function h($value)
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="../index.php">ホーム<span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">ログインする</a>
+        <?php if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) : ?>
+          <li class="nav-item">
+            <a class="nav-link" href="../users/mypage.php">マイページ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../logout.php">ログアウトする</a>
+          </li>
+        <?php else : ?>
+          <li class="nav-item">
+            <a class="nav-link" href="../login.php">ログインする</a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href="../join/index.php">新規登録</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">ログアウトする</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">新規登録</a>
-        </li>
+        <?php endif; ?>
       </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -84,7 +90,15 @@ function h($value)
       </div>
       <div>
         <dt>ユーザーネーム:</dt>
+        <dd><?php echo $users['username']; ?></dd>
+      </div>
+      <div>
+        <dt>ニックネーム:</dt>
         <dd><?php echo $users['nickname']; ?></dd>
+      </div>
+      <div>
+        <dt>パスワード:</dt>
+        <dd>***********</dd>
       </div>
 
     </dl>

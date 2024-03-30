@@ -13,12 +13,12 @@
  
 <body>
     <br>
-    <h1>掲示板サイト</h1>
+    <h1>知恵袋サイト</h1>
     <br>
  
     <div class="border col-8">
         <p>ユーザー登録が完了しました</p>
-        <p><a href="">ログインする</a></p>
+        <p><a href="../login.php">ログインする</a></p>
     </div>
  
     <!-- Optional JavaScript -->

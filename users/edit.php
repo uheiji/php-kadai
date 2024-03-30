@@ -46,17 +46,23 @@ function h($value)
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="../index.php">ホーム<span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ログインする</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ログアウトする</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">新規登録</a>
-                </li>
+                <?php if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../users/mypage.php">マイページ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../logout.php">ログアウトする</a>
+                    </li>
+                <?php else : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../login.php">ログインする</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../join/index.php">新規登録</a>
+                    </li>
+                <?php endif; ?>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -72,11 +78,6 @@ function h($value)
         <h1 class="title">マイページ</h1>
         <div class="mypage__header">
             <p class="mypage__head"><span><?php echo $users['username']; ?></span> さん</p>
-            <div class="mypage__edit">
-                <a href="">
-                    <i class="fas fa-cog"></i>
-                </a>
-            </div>
         </div>
         <dl class="profile">
             <form action="update.php" method="post">
@@ -96,7 +97,13 @@ function h($value)
                     <dt>ニックネーム:</dt>
                     <dd><input type="text" name="nickname" value="<?php echo $users['nickname']; ?>"></dd>
                 </div>
-                <div class="row center-block text-center">
+                <div>
+                    <dt>パスワード:</dt>
+                    <dd>
+                        <a href="change-password.php">パスワードを変更する</a>
+                    </dd>
+                </div>
+                <div class="row center-block text -center">
                     <div class="col-4">
                         <input type="submit" class="btn btn-outline-primary btn-block" value="変更する">
                     </div>

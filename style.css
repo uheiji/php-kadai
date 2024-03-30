@@ -93,6 +93,8 @@ input, select {
 }
 .register a{
 	color: #fff;
+  display: block;
+  padding: 2rem 0;
 }
 .register a:hover{
 	opacity: 0.7;
@@ -136,4 +138,24 @@ input, select {
 ================================================================================== */
 .question{
   padding-top: 60px;
+}
+
+.fv__title{
+  font-size: 40px;
+  padding: 10px 0 ;
+}
+
+.fv__intro{
+  line-height: 1.5;
+}
+
+.listBtn{
+  margin-top: 10px;
+}
+
+.password-container{
+  display: flex;
+}
+.password-container button{
+  width: 10%;
 }

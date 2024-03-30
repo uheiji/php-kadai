@@ -3,8 +3,11 @@ session_start();
 require('../dbconnect.php');
 
 if (!empty($_POST)) {
-    if ($_POST['name'] === '') {
-        $error['name'] = 'blank';
+    if ($_POST['username'] === '') {
+        $error['username'] = 'blank';
+    }
+    if ($_POST['nickname'] === '') {
+        $error['nickname'] = 'blank';
     }
     if ($_POST['user_id'] === '') {
         $error['user_id'] = 'blank';
@@ -53,13 +56,9 @@ if($_REQUEST['action'] == 'rewrite'){
 
 <body>
 
-    <br>
-    <h1>掲示板サイト</h1>
-    <br>
-
     <div class="border col-8">
         <br>
-        <h2>ユーザー登録ページ</h2>
+        <h2>新規登録ページ</h2>
         <br>
         <div class="row">
             <div class="col-md">
@@ -68,14 +67,14 @@ if($_REQUEST['action'] == 'rewrite'){
                         <div class="form-group">
                             <dt><label>ユーザーネーム：</label></dt>
                             <dd><input type="text" name="username" maxlength="255" class="form-control" placeholder="タナカ タロウ" value="<?php echo htmlspecialchars($_POST['username'] , ENT_QUOTES); ?>"></dd>
-                            <?php if ($error['name'] == 'blank') : ?>
-                                <p class="error">＊ニックネームを入力してください</p>
+                            <?php if ($error['username'] == 'blank') : ?>
+                                <p class="error">＊ユーザーネームを入力してください</p>
                             <?php endif; ?>
                         </div>
                         <div class="form-group">
                             <dt><label>ニックネーム：</label></dt>
                             <dd><input type="text" name="nickname" maxlength="255" class="form-control" placeholder="タロウ" value="<?php echo htmlspecialchars($_POST['nickname'] , ENT_QUOTES); ?>"></dd>
-                            <?php if ($error['name'] == 'blank') : ?>
+                            <?php if ($error['nickname'] == 'blank') : ?>
                                 <p class="error">＊ニックネームを入力してください</p>
                             <?php endif; ?>
                         </div>
@@ -92,7 +91,10 @@ if($_REQUEST['action'] == 'rewrite'){
                         </div>
                         <div class="form-group">
                             <dt><label>パスワード：</label></dt>
-                            <dd><input type="password" name="password" maxlength="20" class="form-control" placeholder="" value="<?php echo htmlspecialchars($_POST['password'] , ENT_QUOTES); ?>"></dd>
+                            <dd style="display: flex;">
+                                <input type="password" name="password" maxlength="20" class="form-control" id="passwordInput" pattern="^(?=.*[a-zA-Z])(?=.*\d).{8,}$" placeholder="半角英数字で８文字以上で入力してください" value="<?php echo htmlspecialchars($_POST['password'] , ENT_QUOTES); ?>">
+                                <button id="showPasswordButton" style="width: 10%;">表示</button>
+                            </dd>
                             <?php if ($error['password'] == 'blank') : ?>
                                 <p class="error">＊パスワードを入力してください</p>
                             <?php endif; ?><br>
@@ -118,6 +120,23 @@ if($_REQUEST['action'] == 'rewrite'){
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>    
+        var showPasswordButton = document.getElementById("showPasswordButton");
+        showPasswordButton.addEventListener("click", togglePasswordVisibility);
+
+        function togglePasswordVisibility(event) {
+            event.preventDefault(); // デフォルトのクリック動作をキャンセル
+
+            var passwordInput = document.getElementById("passwordInput");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                showPasswordButton.textContent = "非表示";
+            } else {
+                passwordInput.type = "password";
+                showPasswordButton.textContent = "表示";
+            }
+        }
+    </script>
 </body>
 
 </html>

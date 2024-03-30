@@ -2,22 +2,11 @@
 session_start();
 require('../dbconnect.php');
 
-// ログインできているかの確認
-if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) {
-    $_SESSION['time'] = time();
-
-    $users = $db->prepare('SELECT * FROM users WHERE user_id=?');
-    $users->execute(array(
-        $_SESSION['user_id']
-    ));
-    $users = $users->fetch();
-} else {
-    header('Location: ../login.php');
+// URLパラメータが正しくしてされているか確認、なければトップに戻る
+if (empty($_REQUEST['id'])) {
+    header('Location: index.php');
     exit();
 }
-
-
-
 
 // htmlspecialcharsのショートカット
 function h($value)
@@ -25,36 +14,15 @@ function h($value)
     return htmlspecialchars($value, ENT_QUOTES);
 }
 
-if (isset($_REQUEST['res'])) {
-    $response = $db->prepare('SELECT u.nickname, q.* FROM users u, questions q WHERE u.user_id=q.user_id  AND q.id=? ORDER BY q.create_date DESC');
-    $response->execute(array($_REQUEST['res']));
-    $table = $response->fetch();
-}
 
-if (!empty($_POST)) {
-    if ($_POST['answer'] != '') {
-        $limit = 1000;
-        $answerBody = $_POST['answer'];
-        if (mb_strlen($answerBody) > $limit) {
-            $error['limit'] = 'excess';
-        } else {
-            $answer = $db->prepare('INSERT INTO answers SET question_id=?, user_id=?, body=?, create_date=NOW()');
-            $answer->execute(array(
-                $table['id'],
-                $users['user_id'],
-                $_POST['answer']
-            ));
 
-            header('Location: ../index.php');
-            exit();
-        }
-    }else{
-        $error['answer'] = 'blank';
-    }
-}
+$posts = $db->prepare('SELECT u.username, q.* FROM users u , questions q WHERE u.user_id=q.user_id AND q.id=? ORDER BY q.create_date DESC');
+$posts->execute(array($_REQUEST['id']));
+
+$answers = $db->prepare('SELECT u.username, q.*, a.* FROM users u , questions q , answers a WHERE a.question_id=q.id AND q.id=? AND a.user_id = u.user_id  ORDER BY q.create_date ASC');
+$answers->execute(array($_REQUEST['id']));
+
 ?>
-
-
 <!doctype html>
 <html lang="ja">
 
@@ -65,7 +33,7 @@ if (!empty($_POST)) {
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
     <title>掲示板サイト</title>
 </head>
 <header>
@@ -106,26 +74,51 @@ if (!empty($_POST)) {
 </header>
 
 <body>
-    <div class="container addQuestion">
-        <h1>回答投稿ページ</h1>
-        <p><?php echo h($users['user_id']); ?>さん回答をどうぞ</p>
-        <p style="padding:20px; background: skyblue;"><?php echo $table['body'] ?>　　　に対する回答</p>
-        <form action="" method="post">
-            <dl>
-                <dt>回答文</dt>
-                <dd><textarea name="answer" id="" cols="30" rows="10"></textarea></dd>
-            </dl>
-            <?php if ($error['limit'] == 'excess') : ?>
-                <p class="error">＊文字数が多すぎます。1000文字以下で記入をお願いします。</p>
-            <?php endif; ?>
-            <?php if ($error['answer'] == 'blank') : ?>
-                <p class="error">＊回答が入力されていません</p>
-            <?php endif; ?>
-            <div class="col-2">
-                <input type="submit" class="btn btn-outline-primary btn-block" value="回答する">
+    <div class="container question">
+        <h1>質問詳細ページ</h1>
+        <?php if ($post = $posts->fetch()) : ?>
+            <div class="detail">
+                <p class="detail__name"><?php echo h($post['username']); ?>さんの質問</p>
+                <div class="detail__msg-wrap">
+                    <p class="detail__msg"><?php echo h($post['body']); ?></p>
+                    <span class="detail__day"><?php echo h($post['create_date']); ?></span>
+                </div>
             </div>
-        </form>
+        <?php else : ?>
+            <p class="detail__error">その投稿は削除されたかURLが間違えています。</p>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) : ?>
+            <a href="/answers/addanswer.php?res=<?php echo h($post['id']); ?>" class="answer-btn">この質問の回答をする</a>
+        <?php else : ?>
+            <p class="answer-btn">回答を投稿するにはログインしてください</p>
+        <?php endif; ?>
+
+
+        <?php if ($answers->rowCount() > 0) : ?>
+
+            <div class="before-answer">
+                <h2 class="before-answer-title">質問に対する回答</h2>
+            </div>
+            <?php while ($answer = $answers->fetch()) : ?>
+                <div class="answer__item">
+                    <p class="answer__item-name"><?php echo h($answer['username']); ?>さんの回答</p>
+                    <div class="answer__item-msg-wrap">
+                        <p class="answer__item-msg"><?php echo h($answer['body']); ?></p>
+                        <span class="answer__item-day"><?php echo h($answer['create_date']); ?></span>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        <?php else : ?>
+            <div class="answer__item-msg-wrap">
+                <p class="answer__item-msg">この質問に対する回答はありません</p>
+            </div>
+        <?php endif; ?>
+
+        <a class="return" href="index.php">質問一覧に戻る</a>
     </div>
+
+
 
 
     <!-- Optional JavaScript -->

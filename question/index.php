@@ -54,17 +54,23 @@ $posts->execute();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="../index.php">ホーム<span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ログインする</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ログアウトする</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">新規登録</a>
-                </li>
+                <?php if (isset($_SESSION['user_id']) && $_SESSION['time'] + 3600 > time()) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../users/mypage.php">マイページ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="logout" href="../logout.php">ログアウトする</a>
+                    </li>
+                <?php else : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../login.php">ログインする</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../join/index.php">新規登録</a>
+                    </li>
+                <?php endif; ?>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -85,12 +91,21 @@ $posts->execute();
                 <article class="msg__list">
                     <a href="detail.php?id=<?php echo h($post['id']) ?>">
                         <div class="msg__body">
-                            <p class="msg__question"><?php echo makeLink(h($post['body'])); ?><span class="name">(<?php echo h($post['nickname']); ?>)</span></p>
+                            <?php if ((mb_strlen($post['body'])) > 50) : ?>
+                                <p class="msg__question">
+                                    <?php echo mb_strlen(makeLink(h($post['body'])), 'UTF-8') > 50 ? mb_substr(makeLink(h($post['body'])), 0, 50, 'UTF-8') . '...' : makeLink(h($post['body'])); ?>
+                                    <span class="name">(<?php echo h($post['nickname']); ?>)</span>
+                                </p>
+                            <?php else : ?>
+                                <p class="msg__question">
+                                    <?php echo makeLink(h($post['body'])); ?><span class="name">(<?php echo h($post['nickname']); ?>)</span>
+                                </p>
+                            <?php endif; ?>
+
                             <p class="msg__day"><?php echo h($post['create_date']); ?></p>
                             <?php if ($_SESSION['user_id'] == $post['user_id']) : ?>
                                 [<a href="delete.php?id=<?php echo h($post['id']); ?>" style="color:red;">削除</a>]
                             <?php endif; ?>
-                            [<a href="/answers/addanswer.php?res=<?php echo h($post['id']); ?>"  style="color:blue;">回答する</a>]
                         </div>
                     </a>
                 </article>
@@ -131,6 +146,7 @@ $posts->execute();
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="../script.js"></script>
 </body>
 
 </html>
