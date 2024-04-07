@@ -26,10 +26,11 @@ $cnt = $counts->fetch();
 $maxPage = ceil($cnt['cnt'] / 5);
 $page = min($page, $maxPage);
 
-$start = ($page - 1) * 5;
-$posts = $db->prepare('SELECT u.nickname, q.* FROM users u, questions q WHERE u.user_id=q.user_id ORDER BY q.create_date DESC LIMIT ? , 5');
+$start = max(($page - 1) * 5, 0); // ページ番号が1未満にならないようにする
+$posts = $db->prepare('SELECT u.nickname, q.* FROM users u, questions q WHERE u.user_id=q.user_id ORDER BY q.create_date DESC LIMIT ?, 5');
 $posts->bindParam(1, $start, PDO::PARAM_INT);
 $posts->execute();
+
 ?>
 <!doctype html>
 <html lang="ja">
@@ -62,6 +63,9 @@ $posts->execute();
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="logout" href="../logout.php">ログアウトする</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="addQuestion.php">質問する</a>
                     </li>
                 <?php else : ?>
                     <li class="nav-item">

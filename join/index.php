@@ -92,7 +92,7 @@ if($_REQUEST['action'] == 'rewrite'){
                         <div class="form-group">
                             <dt><label>パスワード：</label></dt>
                             <dd style="display: flex;">
-                                <input type="password" name="password" maxlength="20" class="form-control" id="passwordInput" pattern="^(?=.*[a-zA-Z])(?=.*\d).{8,}$" placeholder="半角英数字で８文字以上で入力してください" value="<?php echo htmlspecialchars($_POST['password'] , ENT_QUOTES); ?>">
+                                <input type="password" name="password" maxlength="20" class="form-control" id="passwordInput" placeholder="半角英数字で８文字以上で入力してください" value="<?php echo htmlspecialchars($_POST['password'] , ENT_QUOTES); ?>">
                                 <button id="showPasswordButton" style="width: 10%;">表示</button>
                             </dd>
                             <?php if ($error['password'] == 'blank') : ?>

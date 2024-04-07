@@ -125,9 +125,6 @@ $answers->execute(array($_REQUEST['id']));
         <a class="return" href="index.php">質問一覧に戻る</a>
     </div>
 
-    <?php echo  $answers_count; ?>
-    <?php echo  $message; ?>
-
 
 
 

@@ -110,7 +110,7 @@ function h($value)
             <div>
                 <dt>現在のパスワード:</dt>
                 <dd class="password-container">
-                    <input type="password" name="currentPassword" id="currentPasswordInput" pattern="^(?=.*[a-zA-Z])(?=.*\d).{8,}$">
+                    <input type="password" name="currentPassword" id="currentPasswordInput">
                     <button class="toggle-password-button" data-target="currentPasswordInput">表示</button>
                 </dd>
             </div>
@@ -120,14 +120,14 @@ function h($value)
             <div>
                 <dt>新しいパスワード:</dt>
                 <dd class="password-container">
-                    <input type="password" name="newPassword" id="newPasswordInput" pattern="^(?=.*[a-zA-Z])(?=.*\d).{8,}$">
+                    <input type="password" name="newPassword" id="newPasswordInput" >
                     <button class="toggle-password-button" data-target="newPasswordInput">表示</button>
                 </dd>
             </div>
             <div>
                 <dt>新しいパスワード（確認用）:</dt>
                 <dd class="password-container">
-                    <input type="password" name="confirmPassword" id="confirmPasswordInput" pattern="^(?=.*[a-zA-Z])(?=.*\d).{8,}$">
+                    <input type="password" name="confirmPassword" id="confirmPasswordInput">
                     <button class="toggle-password-button" data-target="confirmPasswordInput">表示</button>
                 </dd>
             </div>

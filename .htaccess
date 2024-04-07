@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 質問一覧画面
+    RewriteRule ^question$ question/index.php [L]
+    # 質問詳細画面
+    RewriteRule ^question/([0-9]+)$ question/detail.php?id=$1 [L]
+    RewriteRule ^question/add$ question/addQuestion.php [L]
+    RewriteRule ^question/delete/([0-9]+)$ question/delete.php?id=$1 [L]
+    RewriteRule ^answer/add$ answer/addanswer.php [L]
+    RewriteRule ^answer/delete/([0-9]+)$ answer/delete.php?id=$1 [L]
+    RewriteRule ^join$ join/index.php [L]
+    RewriteRule ^users/edit$ users/mypage.php [L]
+    RewriteRule ^users/mypage$ users/change-password.php [L]
+    RewriteRule ^login$ login.php [L]
+
+    # Existing Front Controller Rule
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
