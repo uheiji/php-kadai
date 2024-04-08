@@ -1,11 +1,10 @@
-
 version: '3'
 
 services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile  # ここで使用するDockerfileを指定します。
+      dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
     ports:
@@ -17,6 +16,7 @@ services:
     image: mysql:5.7
     volumes:
       - /var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # SQLスクリプトをマウント
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=my_bbs
@@ -36,4 +36,5 @@ services:
       PMA_PASSWORD: test
       PMA_ARBITRARY: 1
     container_name: phpmyadmin-trial4
-    platform: linux/amd64   # 追加
+    platform: linux/amd64
+
