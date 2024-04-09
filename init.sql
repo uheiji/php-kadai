@@ -31,8 +31,8 @@ CREATE TABLE answers (
 
 
 INSERT INTO users (username, password, nickname, create_date, update_date, user_id)
-VALUES ('akiko', SHA1('wadaakiko'), 'あきこ', NOW(), NOW(), 'akiko');
+VALUES ('akiko', SHA1('wadaakiko'), 'akiko', NOW(), NOW(), 'akiko');
 
 INSERT INTO questions (user_id, body, create_date, update_date, delete_flag)
-VALUES ('akiko', '初めての質問です', NOW(), NOW(), NULL);
+VALUES ('akiko', 'this is First question!', NOW(), NOW(), NULL);
 
