@@ -24,39 +24,39 @@
 * MySQL
 
 # フォルダ構成
-/answers: 回答に関連するファイルが含まれています。
-addanswer.php: 回答を追加するページのコードです。
-delete.php: 回答を削除するページのコードです。
-detail.php: 回答の詳細を表示するページのコードです。
-index.php: 回答一覧を表示するページのコードです。
+/answers: 回答に関連するファイルが含まれています。  
+addanswer.php: 回答を追加するページのコードです。  
+delete.php: 回答を削除するページのコードです。  
+detail.php: 回答の詳細を表示するページのコードです。  
+index.php: 回答一覧を表示するページのコードです。  
 
-/join: ユーザー登録に関連するファイルが含まれています。
-check.php: ユーザー登録時の入力チェックを行うページのコードです。
-index.php: ユーザー登録ページのコードです。
-thanks.php: ユーザー登録完了時のページのコードです。
+/join: ユーザー登録に関連するファイルが含まれています。  
+check.php: ユーザー登録時の入力チェックを行うページのコードです。  
+index.php: ユーザー登録ページのコードです。  
+thanks.php: ユーザー登録完了時のページのコードです。  
 
-/question: 質問に関連するファイルが含まれています。
-addQuestion.php: 質問を追加するページのコードです。
-delete.php: 質問を削除するページのコードです。
-detail.php: 質問の詳細を表示するページのコードです。
-index.php: 質問一覧を表示するページのコードです。
+/question: 質問に関連するファイルが含まれています。  
+addQuestion.php: 質問を追加するページのコードです。  
+delete.php: 質問を削除するページのコードです。  
+detail.php: 質問の詳細を表示するページのコードです。  
+index.php: 質問一覧を表示するページのコードです。  
 
-/users: ユーザー関連のファイルが含まれています。
-change-password.php: パスワード変更ページのコードです。
-edit.php: ユーザー情報編集ページのコードです。
-index.php: ユーザー一覧を表示するページのコードです。
-mypage.php: マイページを表示するコードです。
-update.php: ユーザー情報更新処理を行うページのコードです。
+/users: ユーザー関連のファイルが含まれています。  
+change-password.php: パスワード変更ページのコードです。  
+edit.php: ユーザー情報編集ページのコードです。  
+index.php: ユーザー一覧を表示するページのコードです。  
+mypage.php: マイページを表示するコードです。  
+update.php: ユーザー情報更新処理を行うページのコードです。  
 
-index.php: ファーストページのコードです。
-dbconnect.php: データベース接続設定が含まれています。
-docker-compose.yml: Docker Composeの設定ファイルです。
-Dockerfile: Dockerイメージの設定ファイルです。
-login.php: ログインページのコードです。
-logout.php: ログアウト処理を行うページのコードです。
-style.css: CSSファイルです。
-apache-config.conf: Apacheの設定ファイルです。
-.htaccess: ApacheのURLリライト設定ファイルです。
+index.php: ファーストページのコードです。  
+dbconnect.php: データベース接続設定が含まれています。  
+docker-compose.yml: Docker Composeの設定ファイルです。  
+Dockerfile: Dockerイメージの設定ファイルです。  
+login.php: ログインページのコードです。  
+logout.php: ログアウト処理を行うページのコードです。  
+style.css: CSSファイルです。  
+apache-config.conf: Apacheの設定ファイルです。  
+.htaccess: ApacheのURLリライト設定ファイルです。  
 
 # 環境構築
 このwebアプリはdockerを使用します。dockerがインストールされてることを確認してください。
@@ -71,4 +71,5 @@ docker-compose up -d
 
 
 # 作成者 
+
 * uheiji
