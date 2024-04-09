@@ -62,7 +62,6 @@ require('dbconnect.php');
 
   </div>
 
- 
 
 
   <!-- Optional JavaScript -->

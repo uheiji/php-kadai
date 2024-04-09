@@ -8,7 +8,6 @@ CREATE TABLE users (
     user_id VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
 );
 
-
 CREATE TABLE questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
@@ -28,4 +27,12 @@ CREATE TABLE answers (
     delete_flag BOOLEAN DEFAULT NULL
 );
 
+
+
+
+INSERT INTO users (username, password, nickname, create_date, update_date, user_id)
+VALUES ('akiko', SHA1('wadaakiko'), 'あきこ', NOW(), NOW(), 'akiko');
+
+INSERT INTO questions (user_id, body, create_date, update_date, delete_flag)
+VALUES ('akiko', '初めての質問です', NOW(), NOW(), NULL);
 
