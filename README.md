@@ -65,7 +65,7 @@ apache-config.conf: Apacheの設定ファイルです。
 git clone  https://github.com/uheiji/php-kadai.git
 
 ②Dockerコンテナを起動します
-docker-compose up -d
+docker-compose up 
 
 ③ブラウザで http://localhost:8000 にアクセスしてアプリケーションを利用できます
 
