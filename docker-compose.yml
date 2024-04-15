@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command: ["apache2-foreground"]
     volumes:
       - ./apache-config.conf:/etc/apache2/sites-available/apache-config.conf  # Apacheの設定ファイルをマウント
       - .:/var/www/html

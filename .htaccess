@@ -1,6 +1,7 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
+    RewriteBase /
+    
     # 質問一覧画面
     RewriteRule ^question$ question/index.php [L]
     # 質問詳細画面

@@ -9,8 +9,5 @@ RUN docker-php-ext-install pdo_mysql
 # Apacheの設定ファイルをコピーする
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
-# Apacheの設定ファイルを有効にする
-RUN a2ensite 000-default
-
-# Apacheを再起動する
-RUN service apache2 restart
+# Apacheの設定ファイルを有効にし、サービスを再起動する
+RUN a2ensite 000-default && service apache2 restart

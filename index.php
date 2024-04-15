@@ -1,6 +1,8 @@
 <?php 
 session_start();
 require('dbconnect.php');
+
+
 ?>
 <!doctype html>
 <html lang="ja">
@@ -61,6 +63,7 @@ require('dbconnect.php');
     </div>
 
   </div>
+  <h1><?php echo($_SERVER['REQUEST_URI']);?>でアクセスがありました。</h1>
 
 
 
