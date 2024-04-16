@@ -63,7 +63,7 @@ require('dbconnect.php');
     </div>
 
   </div>
-  <h1><?php echo($_SERVER['REQUEST_URI']);?>でアクセスがありました。</h1>
+  <!-- <h1><?php echo($_SERVER['REQUEST_URI']);?>でアクセスがありました。</h1> -->
 
 
 
